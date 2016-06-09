@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
  * Created by Yevhen on 20.05.2016.
  */
 public abstract class RestaurantControllerTest {
+    private final static String DUPLICATE_KEY_VALUE_VIOLATES_MESSAGE = "duplicate key value violates";
+
     private static MenuController menuController;
     private static TableController tableController;
     private static EmployeeController employeeController;
@@ -311,9 +313,21 @@ public abstract class RestaurantControllerTest {
     @Test(timeout = 2000)
     public void addFindDelTableTest() throws Exception {
         Table table = new Table();
-        table.setNumber(tableController.findTableById(lastTableId()).getNumber() + Util.getRandomInteger());
         table.setDescription(Util.getRandomString());
-        table = tableController.addTable(table);
+        boolean tableWasNotAdded = true;
+        do {
+            try {
+                table.setNumber(tableController.findTableById(lastTableId()).getNumber() + Util.getRandomInteger());
+                table = tableController.addTable(table);
+                tableWasNotAdded = false;
+            } catch (RuntimeException e) {
+                //  Error "duplicate key value violates unique constraint "ak_u_table_number_table"" could be generated
+                if (!e.getMessage().contains(DUPLICATE_KEY_VALUE_VIOLATES_MESSAGE)) {
+                    throw new RuntimeException(e);
+
+                }
+            }
+        } while (tableWasNotAdded);
 
         assertTrue(ObjectService.isEqualByGetterValuesStringRepresentation(table,
                 tableController.findTableByNumber(table.getNumber())));
