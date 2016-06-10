@@ -168,16 +168,15 @@ public abstract class RestaurantControllerTest {
         assertTrue(employeeController.findJobPositionByName(name) == null);
         // Test delete of non-existent data
         employeeController.delJobPosition(name);
+
+        for (JobPosition jp : employeeController.findAllJobPositions()) {
+            System.out.println("Job position Id :" + jp.getId() +
+                    ", Job position name :" + jp.getName());
+        }
     }
 
     @Test//(timeout = 2000)
     public void addFindDelEmployeeTest() throws Exception {
-        for (JobPosition jobPosition : employeeController.findAllJobPositions()) {
-            System.out.println("Job position Id :" + jobPosition.getId() +
-                    ", Job position name :" + jobPosition.getName());
-        }
-
-
         String firstName = Util.getRandomString();
         String secondName = Util.getRandomString();
         Employee employee = new Employee();
