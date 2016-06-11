@@ -3,7 +3,7 @@ package com.company.restaurant.controllers;
 import com.company.restaurant.dao.MenuDao;
 import com.company.restaurant.model.Course;
 import com.company.restaurant.model.Menu;
-import com.company.restaurant.model.MenuCourseList;
+import com.company.restaurant.model.MenuCourseView;
 
 import java.util.List;
 
@@ -49,11 +49,11 @@ public class MenuController extends BasicTransactionManagerController {
         menuDao.delCourseFromMenu(menu, course);
     }
 
-    public List<MenuCourseList> findMenuCourses(Menu menu) {
+    public List<MenuCourseView> findMenuCourses(Menu menu) {
         return menuDao.findMenuCourses(menu);
     }
 
-    public MenuCourseList findMenuCourseByCourseId(Menu menu, int courseId) {
+    public MenuCourseView findMenuCourseByCourseId(Menu menu, int courseId) {
         return menuDao.findMenuCourseByCourseId(menu, courseId);
     }
 }
