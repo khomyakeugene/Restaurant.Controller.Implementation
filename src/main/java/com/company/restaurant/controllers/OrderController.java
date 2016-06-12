@@ -1,10 +1,10 @@
 package com.company.restaurant.controllers;
 
 import com.company.restaurant.dao.OrderCourseDao;
-import com.company.restaurant.dao.OrderDao;
+import com.company.restaurant.dao.OrderViewDao;
 import com.company.restaurant.model.Course;
-import com.company.restaurant.model.Order;
 import com.company.restaurant.model.OrderCourse;
+import com.company.restaurant.model.OrderView;
 import com.company.util.DataIntegrityException;
 
 import java.util.List;
@@ -20,12 +20,12 @@ public class OrderController extends BasicTransactionManagerController  {
     private static final String IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN =
             "It is impossible to delete course from order in <%s> state (<order_id> = %d)!";
 
-    private OrderDao orderDao;
+    private OrderViewDao orderViewDao;
     private StateGraphRules stateGraphRules;
     private OrderCourseDao orderCourseDao;
 
-    public void setOrderDao(OrderDao orderDao) {
-        this.orderDao = orderDao;
+    public void setOrderViewDao(OrderViewDao orderViewDao) {
+        this.orderViewDao = orderViewDao;
     }
 
     public void setStateGraphRules(StateGraphRules stateGraphRules) {
@@ -37,44 +37,44 @@ public class OrderController extends BasicTransactionManagerController  {
     }
 
     private String orderCreationState() {
-        return stateGraphRules.creationState(orderDao.orderEntityName());
+        return stateGraphRules.creationState(orderViewDao.orderEntityName());
     }
 
-    private String orderClosedState(Order order) {
-        return stateGraphRules.closedState(orderDao.orderEntityName(), (order == null) ? null : order.getStateType());
+    private String orderClosedState(OrderView orderView) {
+        return stateGraphRules.closedState(orderViewDao.orderEntityName(), (orderView == null) ? null : orderView.getStateType());
     }
 
     private String orderClosedState() {
         return orderClosedState(null);
     }
 
-    private String orderDeletedState(Order order) {
-        return stateGraphRules.deletedState(orderDao.orderEntityName(), order.getStateType());
+    private String orderDeletedState(OrderView orderView) {
+        return stateGraphRules.deletedState(orderViewDao.orderEntityName(), orderView.getStateType());
     }
 
-    private boolean isFillingActionEnabled(Order order) {
-        return stateGraphRules.isFillingActionEnabled(orderDao.orderEntityName(), order.getStateType());
+    private boolean isFillingActionEnabled(OrderView orderView) {
+        return stateGraphRules.isFillingActionEnabled(orderViewDao.orderEntityName(), orderView.getStateType());
     }
 
     private void errorMessage(String message) {
         throw new DataIntegrityException(message);
     }
 
-    public Order addOrder(Order order) {
-        order.setStateType(orderCreationState());
+    public OrderView addOrder(OrderView orderView) {
+        orderView.setStateType(orderCreationState());
 
-        return orderDao.addOrder(order);
+        return orderViewDao.addOrder(orderView);
     }
 
-    public String delOrder(Order order) {
+    public String delOrder(OrderView orderView) {
         boolean orderWasDeleted = false;
         String result = null;
 
         try {
             try {
                 // Check if it is possible to delete (if <deleted state> is presented for this order)
-                if (orderDeletedState(order) != null) {
-                    result = orderDao.delOrder(order);
+                if (orderDeletedState(orderView) != null) {
+                    result = orderViewDao.delOrder(orderView);
                     orderWasDeleted = true;
                 }
             } catch (DataIntegrityException e) {
@@ -85,7 +85,7 @@ public class OrderController extends BasicTransactionManagerController  {
             if (!orderWasDeleted) {
                 // Perhaps, to raise exception seems to be unnecessary and excessive, but let use such a "mechanism"!
                 errorMessage(String.format(
-                        IMPOSSIBLE_TO_DELETE_ORDER_PATTERN, order.getStateTypeName(), order.getOrderId()));
+                        IMPOSSIBLE_TO_DELETE_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
             }
 
         } catch (DataIntegrityException e) {
@@ -95,40 +95,40 @@ public class OrderController extends BasicTransactionManagerController  {
         return result;
     }
 
-    public Order findOrderById(int id) {
-        return orderDao.findOrderById(id);
+    public OrderView findOrderById(int id) {
+        return orderViewDao.findOrderById(id);
     }
 
-    public Order closeOrder(Order order) {
-        return orderDao.updOrderState(order, orderClosedState(order));
+    public OrderView closeOrder(OrderView orderView) {
+        return orderViewDao.updOrderState(orderView, orderClosedState(orderView));
     }
 
-    public List<Order> findAllOrders() {
-        return orderDao.findAllOrders();
+    public List<OrderView> findAllOrders() {
+        return orderViewDao.findAllOrders();
     }
 
-    public List<Order> findAllOrders(String stateType) {
-        return orderDao.findAllOrders(stateType);
+    public List<OrderView> findAllOrders(String stateType) {
+        return orderViewDao.findAllOrders(stateType);
     }
 
-    public List<Order> findAllOpenOrders() {
+    public List<OrderView> findAllOpenOrders() {
         return findAllOrders(orderCreationState());
     }
 
-    public List<Order> findAllClosedOrders() {
+    public List<OrderView> findAllClosedOrders() {
         return findAllOrders(orderClosedState());
     }
 
-    public String addCourseToOrder(Order order, Course course, int quantity) {
+    public String addCourseToOrder(OrderView orderView, Course course, int quantity) {
         String result = null;
 
         try {
-            if (isFillingActionEnabled(order)) {
-                orderCourseDao.addCourseToOrder(order, course, quantity);
+            if (isFillingActionEnabled(orderView)) {
+                orderCourseDao.addCourseToOrder(orderView, course, quantity);
             } else {
                 // Perhaps, to raise exception seems to be unnecessary and excessive, but let use such a "mechanism"!
                 errorMessage(String.format(
-                        IMPOSSIBLE_TO_ADD_COURSE_TO_ORDER_PATTERN, order.getStateTypeName(), order.getOrderId()));
+                        IMPOSSIBLE_TO_ADD_COURSE_TO_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
             }
         } catch (Exception e) {
             result = e.getMessage();
@@ -137,19 +137,19 @@ public class OrderController extends BasicTransactionManagerController  {
         return result;
     }
 
-    public String addCourseToOrder(Order order, Course course) {
-        return addCourseToOrder(order, course, 1);
+    public String addCourseToOrder(OrderView orderView, Course course) {
+        return addCourseToOrder(orderView, course, 1);
     }
 
-    public String takeCourseFromOrder(Order order, Course course, int quantity) {
+    public String takeCourseFromOrder(OrderView orderView, Course course, int quantity) {
         String result = null;
 
         try {
-            if (isFillingActionEnabled(order)) {
-                orderCourseDao.takeCourseFromOrder(order, course, quantity);
+            if (isFillingActionEnabled(orderView)) {
+                orderCourseDao.takeCourseFromOrder(orderView, course, quantity);
             } else {
                 errorMessage(String.format(
-                        IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN, order.getStateTypeName(), order.getOrderId()));
+                        IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
             }
         } catch (Exception e) {
             result = e.getMessage();
@@ -158,23 +158,23 @@ public class OrderController extends BasicTransactionManagerController  {
         return result;
     }
 
-    public String takeCourseFromOrder(Order order, Course course) {
-        return takeCourseFromOrder(order, course, 1);
+    public String takeCourseFromOrder(OrderView orderView, Course course) {
+        return takeCourseFromOrder(orderView, course, 1);
     }
 
-    public List<OrderCourse> findAllOrderCourses(Order order) {
-        return orderCourseDao.findAllOrderCourses(order);
+    public List<OrderCourse> findAllOrderCourses(OrderView orderView) {
+        return orderCourseDao.findAllOrderCourses(orderView);
     }
 
-    public List<Order> findOrderByNumber(String orderNumber) {
-        return orderDao.findOrderByNumber(orderNumber);
+    public List<OrderView> findOrderByNumber(String orderNumber) {
+        return orderViewDao.findOrderByNumber(orderNumber);
     }
 
-    public OrderCourse findOrderCourseByCourseId(Order order, int courseId) {
-        return orderCourseDao.findOrderCourseByCourseId(order, courseId);
+    public OrderCourse findOrderCourseByCourseId(OrderView orderView, int courseId) {
+        return orderCourseDao.findOrderCourseByCourseId(orderView, courseId);
     }
 
-    public Order updOrderState(Order order, String stateType) {
-        return orderDao.updOrderState(order, stateType);
+    public OrderView updOrderState(OrderView orderView, String stateType) {
+        return orderViewDao.updOrderState(orderView, stateType);
     }
 }
