@@ -1,9 +1,9 @@
 package com.company.restaurant.controllers;
 
-import com.company.restaurant.dao.OrderCourseDao;
+import com.company.restaurant.dao.OrderCourseViewDao;
 import com.company.restaurant.dao.OrderViewDao;
 import com.company.restaurant.model.Course;
-import com.company.restaurant.model.OrderCourse;
+import com.company.restaurant.model.OrderCourseView;
 import com.company.restaurant.model.OrderView;
 import com.company.util.DataIntegrityException;
 
@@ -22,7 +22,7 @@ public class OrderController extends BasicTransactionManagerController  {
 
     private OrderViewDao orderViewDao;
     private StateGraphRules stateGraphRules;
-    private OrderCourseDao orderCourseDao;
+    private OrderCourseViewDao orderCourseViewDao;
 
     public void setOrderViewDao(OrderViewDao orderViewDao) {
         this.orderViewDao = orderViewDao;
@@ -32,8 +32,8 @@ public class OrderController extends BasicTransactionManagerController  {
         this.stateGraphRules = stateGraphRules;
     }
 
-    public void setOrderCourseDao(OrderCourseDao orderCourseDao) {
-        this.orderCourseDao = orderCourseDao;
+    public void setOrderCourseViewDao(OrderCourseViewDao orderCourseViewDao) {
+        this.orderCourseViewDao = orderCourseViewDao;
     }
 
     private String orderCreationState() {
@@ -124,7 +124,7 @@ public class OrderController extends BasicTransactionManagerController  {
 
         try {
             if (isFillingActionEnabled(orderView)) {
-                orderCourseDao.addCourseToOrder(orderView, course, quantity);
+                orderCourseViewDao.addCourseToOrder(orderView, course, quantity);
             } else {
                 // Perhaps, to raise exception seems to be unnecessary and excessive, but let use such a "mechanism"!
                 errorMessage(String.format(
@@ -146,7 +146,7 @@ public class OrderController extends BasicTransactionManagerController  {
 
         try {
             if (isFillingActionEnabled(orderView)) {
-                orderCourseDao.takeCourseFromOrder(orderView, course, quantity);
+                orderCourseViewDao.takeCourseFromOrder(orderView, course, quantity);
             } else {
                 errorMessage(String.format(
                         IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
@@ -162,16 +162,16 @@ public class OrderController extends BasicTransactionManagerController  {
         return takeCourseFromOrder(orderView, course, 1);
     }
 
-    public List<OrderCourse> findAllOrderCourses(OrderView orderView) {
-        return orderCourseDao.findAllOrderCourses(orderView);
+    public List<OrderCourseView> findAllOrderCourses(OrderView orderView) {
+        return orderCourseViewDao.findAllOrderCourses(orderView);
     }
 
     public List<OrderView> findOrderByNumber(String orderNumber) {
         return orderViewDao.findOrderByNumber(orderNumber);
     }
 
-    public OrderCourse findOrderCourseByCourseId(OrderView orderView, int courseId) {
-        return orderCourseDao.findOrderCourseByCourseId(orderView, courseId);
+    public OrderCourseView findOrderCourseByCourseId(OrderView orderView, int courseId) {
+        return orderCourseViewDao.findOrderCourseByCourseId(orderView, courseId);
     }
 
     public OrderView updOrderState(OrderView orderView, String stateType) {
