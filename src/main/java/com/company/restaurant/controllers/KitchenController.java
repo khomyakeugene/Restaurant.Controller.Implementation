@@ -1,24 +1,24 @@
 package com.company.restaurant.controllers;
 
-import com.company.restaurant.dao.CookedCourseDao;
-import com.company.restaurant.model.CookedCourse;
+import com.company.restaurant.dao.CookedCourseViewDao;
+import com.company.restaurant.model.CookedCourseView;
 import com.company.restaurant.model.Course;
 import com.company.restaurant.model.Employee;
 
 import java.util.List;
 
 public class KitchenController extends BasicTransactionManagerController {
-    private CookedCourseDao cookedCourseDao;
+    private CookedCourseViewDao cookedCourseViewDao;
 
-    public void setCookedCourseDao(CookedCourseDao cookedCourseDao) {
-        this.cookedCourseDao = cookedCourseDao;
+    public void setCookedCourseViewDao(CookedCourseViewDao cookedCourseViewDao) {
+        this.cookedCourseViewDao = cookedCourseViewDao;
     }
 
     public void addCookedCourse(Course course, Employee employee, Float weight) {
-        cookedCourseDao.addCookedCourse(course, employee, weight);
+        cookedCourseViewDao.addCookedCourse(course, employee, weight);
     }
 
-    public List<CookedCourse> findAllCookedCourses() {
-        return cookedCourseDao.findAllCookedCourses();
+    public List<CookedCourseView> findAllCookedCourses() {
+        return cookedCourseViewDao.findAllCookedCourses();
     }
 }
