@@ -14,8 +14,12 @@ public class KitchenController extends BasicTransactionManagerController {
         this.cookedCourseViewDao = cookedCourseViewDao;
     }
 
-    public void addCookedCourse(Course course, Employee employee, Float weight) {
-        cookedCourseViewDao.addCookedCourse(course, employee, weight);
+    public CookedCourseView addCookedCourse(Course course, Employee employee, Float weight) {
+        return cookedCourseViewDao.addCookedCourse(course, employee, weight);
+    }
+
+    public String delCookedCourse(CookedCourseView cookedCourseView) {
+        return cookedCourseViewDao.delCookedCourse(cookedCourseView);
     }
 
     public List<CookedCourseView> findAllCookedCourses() {
