@@ -2,20 +2,20 @@ package com.company.restaurant.controllers;
 
 import com.company.restaurant.dao.IngredientDao;
 import com.company.restaurant.dao.PortionDao;
-import com.company.restaurant.dao.WarehouseDao;
+import com.company.restaurant.dao.WarehouseViewDao;
 import com.company.restaurant.model.Ingredient;
 import com.company.restaurant.model.Portion;
-import com.company.restaurant.model.Warehouse;
+import com.company.restaurant.model.WarehouseView;
 
 import java.util.List;
 
 public class WarehouseController extends BasicTransactionManagerController {
-    private WarehouseDao warehouseDao;
+    private WarehouseViewDao warehouseViewDao;
     private IngredientDao ingredientDao;
     private PortionDao portionDao;
 
-    public void setWarehouseDao(WarehouseDao warehouseDao) {
-        this.warehouseDao = warehouseDao;
+    public void setWarehouseViewDao(WarehouseViewDao warehouseViewDao) {
+        this.warehouseViewDao = warehouseViewDao;
     }
 
     public void setIngredientDao(IngredientDao ingredientDao) {
@@ -27,27 +27,27 @@ public class WarehouseController extends BasicTransactionManagerController {
     }
 
     public void addIngredientToWarehouse(Ingredient ingredient, Portion portion, float amount) {
-        warehouseDao.addIngredientToWarehouse(ingredient, portion, amount);
+        warehouseViewDao.addIngredientToWarehouse(ingredient, portion, amount);
     }
 
     public void takeIngredientFromWarehouse(Ingredient ingredient, Portion portion, float amount) {
-        warehouseDao.takeIngredientFromWarehouse(ingredient, portion, amount);
+        warehouseViewDao.takeIngredientFromWarehouse(ingredient, portion, amount);
     }
 
-    public List<Warehouse> findIngredientInWarehouseByName(String name) {
-        return warehouseDao.findIngredientInWarehouseByName(name);
+    public List<WarehouseView> findIngredientInWarehouseByName(String name) {
+        return warehouseViewDao.findIngredientInWarehouseByName(name);
     }
 
-    public List<Warehouse> findIngredientInWarehouseById(int ingredientId) {
-        return warehouseDao.findIngredientInWarehouseById(ingredientId);
+    public List<WarehouseView> findIngredientInWarehouseById(int ingredientId) {
+        return warehouseViewDao.findIngredientInWarehouseById(ingredientId);
     }
 
-    public List<Warehouse> findAllWarehouseIngredients() {
-        return warehouseDao.findAllWarehouseIngredients();
+    public List<WarehouseView> findAllWarehouseIngredients() {
+        return warehouseViewDao.findAllWarehouseIngredients();
     }
 
-    public List<Warehouse> findAllElapsingWarehouseIngredients(float limit) {
-        return warehouseDao.findAllElapsingWarehouseIngredients(limit);
+    public List<WarehouseView> findAllElapsingWarehouseIngredients(float limit) {
+        return warehouseViewDao.findAllElapsingWarehouseIngredients(limit);
     }
 
     public List<Ingredient> findAllIngredients() {
