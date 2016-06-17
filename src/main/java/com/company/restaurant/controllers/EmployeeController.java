@@ -23,8 +23,8 @@ public class EmployeeController extends BasicTransactionManagerController   {
         return jobPositionDao.addJobPosition(name);
     }
 
-    public String delJobPosition(String name) {
-        return jobPositionDao.delJobPosition(name);
+    public void delJobPosition(String name) {
+        jobPositionDao.delJobPosition(name);
     }
 
     public JobPosition findJobPositionByName(String name) {
@@ -43,12 +43,12 @@ public class EmployeeController extends BasicTransactionManagerController   {
         return employeeDao.addEmployee(employee);
     }
 
-    public String delEmployee(Employee employee) {
-        return employeeDao.delEmployee(employee);
+    public void delEmployee(Employee employee) {
+        employeeDao.delEmployee(employee);
     }
 
-    public String delEmployee(int employeeId) {
-        return employeeDao.delEmployee(employeeId);
+    public void delEmployee(int employeeId) {
+        employeeDao.delEmployee(employeeId);
     }
 
     public List<Employee> findAllEmployees() {

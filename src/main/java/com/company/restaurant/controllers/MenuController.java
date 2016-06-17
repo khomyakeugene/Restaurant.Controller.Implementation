@@ -21,12 +21,12 @@ public class MenuController extends BasicTransactionManagerController {
         return menuDao.addMenu(name);
     }
 
-    public String delMenu(String name) {
-        return menuDao.delMenu(name);
+    public void delMenu(String name) {
+        menuDao.delMenu(name);
     }
 
-    public String delMenu(Menu menu) {
-        return menuDao.delMenu(menu);
+    public void delMenu(Menu menu) {
+        menuDao.delMenu(menu);
     }
 
     public Menu findMenuByName(String name) {

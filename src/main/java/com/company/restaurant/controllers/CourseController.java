@@ -23,8 +23,8 @@ public class CourseController extends BasicTransactionManagerController {
         return courseCategoryDao.addCourseCategory(name);
     }
 
-    public String delCourseCategory(String name) {
-        return courseCategoryDao.delCourseCategory(name);
+    public void delCourseCategory(String name) {
+        courseCategoryDao.delCourseCategory(name);
     }
 
     public CourseCategory findCourseCategoryByName(String name) {
@@ -43,12 +43,12 @@ public class CourseController extends BasicTransactionManagerController {
         return courseDao.addCourse(course);
     }
 
-    public String delCourse(Course course) {
-        return courseDao.delCourse(course);
+    public void delCourse(Course course) {
+        courseDao.delCourse(course);
     }
 
-    public String delCourse(String name) {
-        return courseDao.delCourse(name);
+    public void delCourse(String name) {
+        courseDao.delCourse(name);
     }
 
     public Course findCourseByName(String name) {

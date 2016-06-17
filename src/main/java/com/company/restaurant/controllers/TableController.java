@@ -16,8 +16,8 @@ public class TableController extends BasicTransactionManagerController {
         return tableDao.addTable(table);
     }
 
-    public String delTable(Table table) {
-        return tableDao.delTable(table);
+    public void delTable(Table table) {
+        tableDao.delTable(table);
     }
 
     public Table findTableById(int tableId) {
