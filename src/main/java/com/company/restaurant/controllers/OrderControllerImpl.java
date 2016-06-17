@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Yevhen on 22.05.2016.
  */
-public class OrderController extends BasicTransactionManagerController  {
+public class OrderControllerImpl extends BasicTransactionManagerController implements OrderController {
     private static final String IMPOSSIBLE_TO_DELETE_ORDER_PATTERN =
             "It is impossible to delete order in <%s> state (<order_id> = %d)!";
     private static final String IMPOSSIBLE_TO_ADD_COURSE_TO_ORDER_PATTERN =
@@ -60,12 +60,14 @@ public class OrderController extends BasicTransactionManagerController  {
         throw new DataIntegrityException(message);
     }
 
+    @Override
     public OrderView addOrder(OrderView orderView) {
         orderView.setStateType(orderCreationState());
 
         return orderViewDao.addOrder(orderView);
     }
 
+    @Override
     public void delOrder(OrderView orderView) {
         if (orderDeletedState(orderView) != null) {
             orderViewDao.delOrder(orderView);
@@ -75,30 +77,37 @@ public class OrderController extends BasicTransactionManagerController  {
         }
     }
 
+    @Override
     public OrderView findOrderById(int id) {
         return orderViewDao.findOrderById(id);
     }
 
+    @Override
     public OrderView closeOrder(OrderView orderView) {
         return orderViewDao.updOrderState(orderView, orderClosedState(orderView));
     }
 
+    @Override
     public List<OrderView> findAllOrders() {
         return orderViewDao.findAllOrders();
     }
 
+    @Override
     public List<OrderView> findAllOrders(String stateType) {
         return orderViewDao.findAllOrders(stateType);
     }
 
+    @Override
     public List<OrderView> findAllOpenOrders() {
         return findAllOrders(orderCreationState());
     }
 
+    @Override
     public List<OrderView> findAllClosedOrders() {
         return findAllOrders(orderClosedState());
     }
 
+    @Override
     public String addCourseToOrder(OrderView orderView, Course course, int quantity) {
         String result = null;
 
@@ -117,10 +126,12 @@ public class OrderController extends BasicTransactionManagerController  {
         return result;
     }
 
+    @Override
     public String addCourseToOrder(OrderView orderView, Course course) {
         return addCourseToOrder(orderView, course, 1);
     }
 
+    @Override
     public String takeCourseFromOrder(OrderView orderView, Course course, int quantity) {
         String result = null;
 
@@ -138,22 +149,27 @@ public class OrderController extends BasicTransactionManagerController  {
         return result;
     }
 
+    @Override
     public String takeCourseFromOrder(OrderView orderView, Course course) {
         return takeCourseFromOrder(orderView, course, 1);
     }
 
+    @Override
     public List<OrderCourseView> findAllOrderCourses(OrderView orderView) {
         return orderCourseViewDao.findAllOrderCourses(orderView);
     }
 
+    @Override
     public List<OrderView> findOrderByNumber(String orderNumber) {
         return orderViewDao.findOrderByNumber(orderNumber);
     }
 
+    @Override
     public OrderCourseView findOrderCourseByCourseId(OrderView orderView, int courseId) {
         return orderCourseViewDao.findOrderCourseByCourseId(orderView, courseId);
     }
 
+    @Override
     public OrderView updOrderState(OrderView orderView, String stateType) {
         return orderViewDao.updOrderState(orderView, stateType);
     }
