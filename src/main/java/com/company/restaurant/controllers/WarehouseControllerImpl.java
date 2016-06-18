@@ -28,12 +28,16 @@ public class WarehouseControllerImpl implements WarehouseController {
 
     @Override
     public void addIngredientToWarehouse(Ingredient ingredient, Portion portion, float amount) {
-        warehouseViewDao.addIngredientToWarehouse(ingredient, portion, amount);
+        if (amount > 0.0) {
+            warehouseViewDao.addIngredientToWarehouse(ingredient, portion, amount);
+        }
     }
 
     @Override
     public void takeIngredientFromWarehouse(Ingredient ingredient, Portion portion, float amount) {
-        warehouseViewDao.takeIngredientFromWarehouse(ingredient, portion, amount);
+        if (amount > 0.0) {
+            warehouseViewDao.takeIngredientFromWarehouse(ingredient, portion, amount);
+        }
     }
 
     @Override

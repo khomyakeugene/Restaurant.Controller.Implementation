@@ -16,12 +16,20 @@ public class KitchenControllerImpl implements KitchenController {
 
     @Override
     public CookedCourseView addCookedCourse(Course course, Employee employee, Float weight) {
-        return cookedCourseViewDao.addCookedCourse(course, employee, weight);
+        CookedCourseView result = null;
+
+        if (weight != null && weight > 0.0) {
+            result = cookedCourseViewDao.addCookedCourse(course, employee, weight);
+        }
+
+        return result;
     }
 
     @Override
     public void delCookedCourse(CookedCourseView cookedCourseView) {
-        cookedCourseViewDao.delCookedCourse(cookedCourseView);
+        if (cookedCourseView != null) {
+            cookedCourseViewDao.delCookedCourse(cookedCourseView);
+        }
     }
 
     @Override
