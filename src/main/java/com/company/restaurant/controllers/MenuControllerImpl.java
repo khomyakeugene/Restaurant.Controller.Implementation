@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Yevhen on 19.05.2016.
  */
-public class MenuControllerImpl extends BasicTransactionManagerController implements MenuController {
+public class MenuControllerImpl implements MenuController {
     private MenuDao menuDao;
 
     public void setMenuDao(MenuDao menuDao) {

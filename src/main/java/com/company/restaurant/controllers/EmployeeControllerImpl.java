@@ -7,7 +7,7 @@ import com.company.restaurant.model.JobPosition;
 
 import java.util.List;
 
-public class EmployeeControllerImpl extends BasicTransactionManagerController implements EmployeeController {
+public class EmployeeControllerImpl implements EmployeeController {
     private JobPositionDao jobPositionDao;
     private EmployeeDao employeeDao;
 

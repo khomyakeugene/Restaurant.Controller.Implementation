@@ -7,7 +7,7 @@ import com.company.restaurant.model.Employee;
 
 import java.util.List;
 
-public class KitchenControllerImpl extends BasicTransactionManagerController implements KitchenController {
+public class KitchenControllerImpl implements KitchenController {
     private CookedCourseViewDao cookedCourseViewDao;
 
     public void setCookedCourseViewDao(CookedCourseViewDao cookedCourseViewDao) {

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Yevhen on 22.05.2016.
  */
-public class OrderControllerImpl extends BasicTransactionManagerController implements OrderController {
+public class OrderControllerImpl implements OrderController {
     private static final String IMPOSSIBLE_TO_DELETE_ORDER_PATTERN =
             "It is impossible to delete order in <%s> state (<order_id> = %d)!";
     private static final String IMPOSSIBLE_TO_ADD_COURSE_TO_ORDER_PATTERN =

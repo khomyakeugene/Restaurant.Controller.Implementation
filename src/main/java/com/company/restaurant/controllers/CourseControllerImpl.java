@@ -7,7 +7,7 @@ import com.company.restaurant.model.CourseCategory;
 
 import java.util.List;
 
-public class CourseControllerImpl extends BasicTransactionManagerController implements CourseController {
+public class CourseControllerImpl implements CourseController {
     private CourseCategoryDao courseCategoryDao;
     private CourseDao courseDao;
 

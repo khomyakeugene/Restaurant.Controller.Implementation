@@ -9,7 +9,7 @@ import com.company.restaurant.model.WarehouseView;
 
 import java.util.List;
 
-public class WarehouseControllerImpl extends BasicTransactionManagerController implements WarehouseController {
+public class WarehouseControllerImpl implements WarehouseController {
     private WarehouseViewDao warehouseViewDao;
     private IngredientDao ingredientDao;
     private PortionDao portionDao;

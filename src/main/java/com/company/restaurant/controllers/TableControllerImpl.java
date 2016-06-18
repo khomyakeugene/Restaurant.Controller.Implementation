@@ -5,7 +5,7 @@ import com.company.restaurant.model.Table;
 
 import java.util.List;
 
-public class TableControllerImpl extends BasicTransactionManagerController implements TableController {
+public class TableControllerImpl implements TableController {
     private TableDao tableDao;
 
     public void setTableDao(TableDao tableDao) {
