@@ -108,12 +108,12 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public String addCourseToOrder(OrderView orderView, Course course, int quantity) {
+    public String addCourseToOrder(OrderView orderView, Course course) {
         String result = null;
 
         try {
             if (isFillingActionEnabled(orderView)) {
-                orderCourseViewDao.addCourseToOrder(orderView, course, quantity);
+                orderCourseViewDao.addCourseToOrder(orderView, course);
             } else {
                 // Perhaps, to raise exception seems to be unnecessary and excessive, but let use such a "mechanism"!
                 errorMessage(String.format(
@@ -127,17 +127,12 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public String addCourseToOrder(OrderView orderView, Course course) {
-        return addCourseToOrder(orderView, course, 1);
-    }
-
-    @Override
-    public String takeCourseFromOrder(OrderView orderView, Course course, int quantity) {
+    public String takeCourseFromOrder(OrderView orderView, Course course) {
         String result = null;
 
         try {
             if (isFillingActionEnabled(orderView)) {
-                orderCourseViewDao.takeCourseFromOrder(orderView, course, quantity);
+                orderCourseViewDao.takeCourseFromOrder(orderView, course);
             } else {
                 errorMessage(String.format(
                         IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
@@ -147,11 +142,6 @@ public class OrderControllerImpl implements OrderController {
         }
 
         return result;
-    }
-
-    @Override
-    public String takeCourseFromOrder(OrderView orderView, Course course) {
-        return takeCourseFromOrder(orderView, course, 1);
     }
 
     @Override
