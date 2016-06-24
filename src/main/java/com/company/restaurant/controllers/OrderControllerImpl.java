@@ -1,9 +1,7 @@
 package com.company.restaurant.controllers;
 
-import com.company.restaurant.dao.OrderCourseViewDao;
 import com.company.restaurant.dao.OrderViewDao;
 import com.company.restaurant.model.Course;
-import com.company.restaurant.model.OrderCourseView;
 import com.company.restaurant.model.OrderView;
 import com.company.util.DataIntegrityException;
 
@@ -22,7 +20,6 @@ public class OrderControllerImpl implements OrderController {
 
     private OrderViewDao orderViewDao;
     private StateGraphRules stateGraphRules;
-    private OrderCourseViewDao orderCourseViewDao;
 
     public void setOrderViewDao(OrderViewDao orderViewDao) {
         this.orderViewDao = orderViewDao;
@@ -30,10 +27,6 @@ public class OrderControllerImpl implements OrderController {
 
     public void setStateGraphRules(StateGraphRules stateGraphRules) {
         this.stateGraphRules = stateGraphRules;
-    }
-
-    public void setOrderCourseViewDao(OrderCourseViewDao orderCourseViewDao) {
-        this.orderCourseViewDao = orderCourseViewDao;
     }
 
     private String orderCreationState() {
@@ -113,7 +106,7 @@ public class OrderControllerImpl implements OrderController {
 
         try {
             if (isFillingActionEnabled(orderView)) {
-                orderCourseViewDao.addCourseToOrder(orderView, course);
+                orderViewDao.addCourseToOrder(orderView, course);
             } else {
                 // Perhaps, to raise exception seems to be unnecessary and excessive, but let use such a "mechanism"!
                 errorMessage(String.format(
@@ -132,7 +125,7 @@ public class OrderControllerImpl implements OrderController {
 
         try {
             if (isFillingActionEnabled(orderView)) {
-                orderCourseViewDao.takeCourseFromOrder(orderView, course);
+                orderViewDao.takeCourseFromOrder(orderView, course);
             } else {
                 errorMessage(String.format(
                         IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
@@ -145,8 +138,8 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public List<OrderCourseView> findAllOrderCourses(OrderView orderView) {
-        return orderCourseViewDao.findAllOrderCourses(orderView);
+    public List<Course> findAllOrderCourses(OrderView orderView) {
+        return orderViewDao.findAllOrderCourses(orderView);
     }
 
     @Override
@@ -155,8 +148,8 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public OrderCourseView findOrderCourseByCourseId(OrderView orderView, int courseId) {
-        return orderCourseViewDao.findOrderCourseByCourseId(orderView, courseId);
+    public Course findOrderCourseByCourseId(OrderView orderView, int courseId) {
+        return orderViewDao.findOrderCourseByCourseId(orderView, courseId);
     }
 
     @Override
