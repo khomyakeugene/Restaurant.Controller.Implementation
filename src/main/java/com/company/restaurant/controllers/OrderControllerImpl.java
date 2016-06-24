@@ -1,8 +1,8 @@
 package com.company.restaurant.controllers;
 
-import com.company.restaurant.dao.OrderViewDao;
+import com.company.restaurant.dao.OrderDao;
 import com.company.restaurant.model.Course;
-import com.company.restaurant.model.OrderView;
+import com.company.restaurant.model.Order;
 import com.company.util.DataIntegrityException;
 
 import java.util.List;
@@ -18,11 +18,11 @@ public class OrderControllerImpl implements OrderController {
     private static final String IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN =
             "It is impossible to delete course from order in <%s> state (<order_id> = %d)!";
 
-    private OrderViewDao orderViewDao;
+    private OrderDao orderDao;
     private StateGraphRules stateGraphRules;
 
-    public void setOrderViewDao(OrderViewDao orderViewDao) {
-        this.orderViewDao = orderViewDao;
+    public void setOrderDao(OrderDao orderDao) {
+        this.orderDao = orderDao;
     }
 
     public void setStateGraphRules(StateGraphRules stateGraphRules) {
@@ -30,23 +30,23 @@ public class OrderControllerImpl implements OrderController {
     }
 
     private String orderCreationState() {
-        return stateGraphRules.creationState(orderViewDao.orderEntityName());
+        return stateGraphRules.creationState(orderDao.orderEntityName());
     }
 
-    private String orderClosedState(OrderView orderView) {
-        return stateGraphRules.closedState(orderViewDao.orderEntityName(), (orderView == null) ? null : orderView.getStateType());
+    private String orderClosedState(Order order) {
+        return stateGraphRules.closedState(orderDao.orderEntityName(), (order == null) ? null : order.getStateType());
     }
 
     private String orderClosedState() {
         return orderClosedState(null);
     }
 
-    private String orderDeletedState(OrderView orderView) {
-        return stateGraphRules.deletedState(orderViewDao.orderEntityName(), orderView.getStateType());
+    private String orderDeletedState(Order order) {
+        return stateGraphRules.deletedState(orderDao.orderEntityName(), order.getStateType());
     }
 
-    private boolean isFillingActionEnabled(OrderView orderView) {
-        return stateGraphRules.isFillingActionEnabled(orderViewDao.orderEntityName(), orderView.getStateType());
+    private boolean isFillingActionEnabled(Order order) {
+        return stateGraphRules.isFillingActionEnabled(orderDao.orderEntityName(), order.getStateType());
     }
 
     private void errorMessage(String message) {
@@ -54,63 +54,63 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public OrderView addOrder(OrderView orderView) {
-        orderView.setStateType(orderCreationState());
+    public Order addOrder(Order order) {
+        order.setStateType(orderCreationState());
 
-        return orderViewDao.addOrder(orderView);
+        return orderDao.addOrder(order);
     }
 
     @Override
-    public void delOrder(OrderView orderView) {
-        if (orderDeletedState(orderView) != null) {
-            orderViewDao.delOrder(orderView);
+    public void delOrder(Order order) {
+        if (orderDeletedState(order) != null) {
+            orderDao.delOrder(order);
         } else {
             throw new DataIntegrityException(String.format(
-                    IMPOSSIBLE_TO_DELETE_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
+                    IMPOSSIBLE_TO_DELETE_ORDER_PATTERN, order, order.getOrderId()));
         }
     }
 
     @Override
-    public OrderView findOrderById(int id) {
-        return orderViewDao.findOrderById(id);
+    public Order findOrderById(int id) {
+        return orderDao.findOrderById(id);
     }
 
     @Override
-    public OrderView closeOrder(OrderView orderView) {
-        return orderViewDao.updOrderState(orderView, orderClosedState(orderView));
+    public Order closeOrder(Order order) {
+        return orderDao.updOrderState(order, orderClosedState(order));
     }
 
     @Override
-    public List<OrderView> findAllOrders() {
-        return orderViewDao.findAllOrders();
+    public List<Order> findAllOrders() {
+        return orderDao.findAllOrders();
     }
 
     @Override
-    public List<OrderView> findAllOrders(String stateType) {
-        return orderViewDao.findAllOrders(stateType);
+    public List<Order> findAllOrders(String stateType) {
+        return orderDao.findAllOrders(stateType);
     }
 
     @Override
-    public List<OrderView> findAllOpenOrders() {
+    public List<Order> findAllOpenOrders() {
         return findAllOrders(orderCreationState());
     }
 
     @Override
-    public List<OrderView> findAllClosedOrders() {
+    public List<Order> findAllClosedOrders() {
         return findAllOrders(orderClosedState());
     }
 
     @Override
-    public String addCourseToOrder(OrderView orderView, Course course) {
+    public String addCourseToOrder(Order order, Course course) {
         String result = null;
 
         try {
-            if (isFillingActionEnabled(orderView)) {
-                orderViewDao.addCourseToOrder(orderView, course);
+            if (isFillingActionEnabled(order)) {
+                orderDao.addCourseToOrder(order, course);
             } else {
                 // Perhaps, to raise exception seems to be unnecessary and excessive, but let use such a "mechanism"!
                 errorMessage(String.format(
-                        IMPOSSIBLE_TO_ADD_COURSE_TO_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
+                        IMPOSSIBLE_TO_ADD_COURSE_TO_ORDER_PATTERN, order.getState().getName(), order.getOrderId()));
             }
         } catch (Exception e) {
             result = e.getMessage();
@@ -120,15 +120,15 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public String takeCourseFromOrder(OrderView orderView, Course course) {
+    public String takeCourseFromOrder(Order order, Course course) {
         String result = null;
 
         try {
-            if (isFillingActionEnabled(orderView)) {
-                orderViewDao.takeCourseFromOrder(orderView, course);
+            if (isFillingActionEnabled(order)) {
+                orderDao.takeCourseFromOrder(order, course);
             } else {
                 errorMessage(String.format(
-                        IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN, orderView.getStateTypeName(), orderView.getOrderId()));
+                        IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN, order.getState().getName(), order.getOrderId()));
             }
         } catch (Exception e) {
             result = e.getMessage();
@@ -138,22 +138,22 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public List<Course> findAllOrderCourses(OrderView orderView) {
-        return orderViewDao.findAllOrderCourses(orderView);
+    public List<Course> findAllOrderCourses(Order order) {
+        return orderDao.findAllOrderCourses(order);
     }
 
     @Override
-    public List<OrderView> findOrderByNumber(String orderNumber) {
-        return orderViewDao.findOrderByNumber(orderNumber);
+    public List<Order> findOrderByNumber(String orderNumber) {
+        return orderDao.findOrderByNumber(orderNumber);
     }
 
     @Override
-    public Course findOrderCourseByCourseId(OrderView orderView, int courseId) {
-        return orderViewDao.findOrderCourseByCourseId(orderView, courseId);
+    public Course findOrderCourseByCourseId(Order order, int courseId) {
+        return orderDao.findOrderCourseByCourseId(order, courseId);
     }
 
     @Override
-    public OrderView updOrderState(OrderView orderView, String stateType) {
-        return orderViewDao.updOrderState(orderView, stateType);
+    public Order updOrderState(Order order, String stateType) {
+        return orderDao.updOrderState(order, stateType);
     }
 }
