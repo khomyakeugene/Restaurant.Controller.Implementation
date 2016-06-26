@@ -34,7 +34,8 @@ public class OrderControllerImpl implements OrderController {
     }
 
     private String orderClosedState(Order order) {
-        return stateGraphRules.closedState(orderDao.orderEntityName(), (order == null) ? null : order.getStateType());
+        return stateGraphRules.closedState(orderDao.orderEntityName(), (order == null) ? null :
+                order.getState().getType());
     }
 
     private String orderClosedState() {
@@ -42,11 +43,11 @@ public class OrderControllerImpl implements OrderController {
     }
 
     private String orderDeletedState(Order order) {
-        return stateGraphRules.deletedState(orderDao.orderEntityName(), order.getStateType());
+        return stateGraphRules.deletedState(orderDao.orderEntityName(), order.getState().getType());
     }
 
     private boolean isFillingActionEnabled(Order order) {
-        return stateGraphRules.isFillingActionEnabled(orderDao.orderEntityName(), order.getStateType());
+        return stateGraphRules.isFillingActionEnabled(orderDao.orderEntityName(), order.getState().getType());
     }
 
     private void errorMessage(String message) {
@@ -55,7 +56,7 @@ public class OrderControllerImpl implements OrderController {
 
     @Override
     public Order addOrder(Order order) {
-        order.setStateType(orderCreationState());
+        order.getState().setType(orderCreationState());
 
         return orderDao.addOrder(order);
     }
