@@ -5,6 +5,7 @@ import com.company.restaurant.model.Course;
 import com.company.restaurant.model.Menu;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Yevhen on 19.05.2016.
@@ -57,7 +58,7 @@ public class MenuControllerImpl implements MenuController {
     }
 
     @Override
-    public List<Course> findMenuCourses(Menu menu) {
+    public Set<Course> findMenuCourses(Menu menu) {
         return menuDao.findMenuCourses(menu);
     }
 
