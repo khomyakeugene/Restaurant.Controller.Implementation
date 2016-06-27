@@ -139,8 +139,8 @@ public class OrderControllerImpl implements OrderController {
     }
 
     @Override
-    public List<Course> findAllOrderCourses(Order order) {
-        return orderDao.findAllOrderCourses(order);
+    public List<Course> findOrderCourses(Order order) {
+        return orderDao.findOrderCourses(order);
     }
 
     @Override
