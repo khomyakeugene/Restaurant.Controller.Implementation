@@ -3,7 +3,6 @@ package com.company.restaurant.controllers;
 import com.company.restaurant.dao.MenuDao;
 import com.company.restaurant.model.Course;
 import com.company.restaurant.model.Menu;
-import com.company.restaurant.model.MenuCourseView;
 
 import java.util.List;
 
@@ -58,12 +57,12 @@ public class MenuControllerImpl implements MenuController {
     }
 
     @Override
-    public List<MenuCourseView> findMenuCourses(Menu menu) {
+    public List<Course> findMenuCourses(Menu menu) {
         return menuDao.findMenuCourses(menu);
     }
 
     @Override
-    public MenuCourseView findMenuCourseByCourseId(Menu menu, int courseId) {
+    public Course findMenuCourseByCourseId(Menu menu, int courseId) {
         return menuDao.findMenuCourseByCourseId(menu, courseId);
     }
 }
