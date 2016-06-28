@@ -1,39 +1,39 @@
 package com.company.restaurant.controllers;
 
-import com.company.restaurant.dao.CookedCourseViewDao;
-import com.company.restaurant.model.CookedCourseView;
+import com.company.restaurant.dao.CookedCourseDao;
+import com.company.restaurant.model.CookedCourse;
 import com.company.restaurant.model.Course;
 import com.company.restaurant.model.Employee;
 
 import java.util.List;
 
 public class KitchenControllerImpl implements KitchenController {
-    private CookedCourseViewDao cookedCourseViewDao;
+    private CookedCourseDao cookedCourseDao;
 
-    public void setCookedCourseViewDao(CookedCourseViewDao cookedCourseViewDao) {
-        this.cookedCourseViewDao = cookedCourseViewDao;
+    public void setCookedCourseDao(CookedCourseDao cookedCourseDao) {
+        this.cookedCourseDao = cookedCourseDao;
     }
 
     @Override
-    public CookedCourseView addCookedCourse(Course course, Employee employee, Float weight) {
-        CookedCourseView result = null;
+    public CookedCourse addCookedCourse(Course course, Employee employee, Float weight) {
+        CookedCourse result = null;
 
         if (weight != null && weight > 0.0) {
-            result = cookedCourseViewDao.addCookedCourse(course, employee, weight);
+            result = cookedCourseDao.addCookedCourse(course, employee, weight);
         }
 
         return result;
     }
 
     @Override
-    public void delCookedCourse(CookedCourseView cookedCourseView) {
-        if (cookedCourseView != null) {
-            cookedCourseViewDao.delCookedCourse(cookedCourseView);
+    public void delCookedCourse(CookedCourse cookedCourse) {
+        if (cookedCourse != null) {
+            cookedCourseDao.delCookedCourse(cookedCourse);
         }
     }
 
     @Override
-    public List<CookedCourseView> findAllCookedCourses() {
-        return cookedCourseViewDao.findAllCookedCourses();
+    public List<CookedCourse> findAllCookedCourses() {
+        return cookedCourseDao.findAllCookedCourses();
     }
 }
