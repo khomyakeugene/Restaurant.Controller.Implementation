@@ -1,5 +1,6 @@
 package com.company.restaurant.controllers;
 
+import com.company.restaurant.controllers.proto.Controller;
 import com.company.restaurant.dao.MenuDao;
 import com.company.restaurant.model.Course;
 import com.company.restaurant.model.Menu;
@@ -10,7 +11,7 @@ import java.util.Set;
 /**
  * Created by Yevhen on 19.05.2016.
  */
-public class MenuControllerImpl implements MenuController {
+public class MenuControllerImpl extends Controller implements MenuController {
     private MenuDao menuDao;
 
     public void setMenuDao(MenuDao menuDao) {
