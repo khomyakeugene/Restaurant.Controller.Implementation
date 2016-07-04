@@ -15,9 +15,9 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
     private static final String IT_IS_NEED_TO_HAVE_INGREDIENT_PATTERN =
             "To prepare %f kg of course <%s> you need to have %f (%s) of ingredient <%s>";
     private static final String THERE_IS_NO_INGREDIENT_IN_WAREHOUSE_MESSAGE =
-            "; but there is no such ingredient in warehouse";
+            "; but there is no such ingredient in the warehouse";
     private static final String THERE_IS_ONLY_OF_INGREDIENT_IN_WAREHOUSE_PATTERN =
-            "; but there is only %f of such ingredient in warehouse";
+            "; but there is only %f of such ingredient in the warehouse";
 
     private boolean disableCourseWithoutIngredients;
     private CookedCourseDao cookedCourseDao;
