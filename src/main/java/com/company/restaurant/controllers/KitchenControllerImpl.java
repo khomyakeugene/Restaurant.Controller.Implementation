@@ -19,9 +19,14 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
     private static final String THERE_IS_ONLY_OF_INGREDIENT_IN_WAREHOUSE_PATTERN =
             "; but there is only %f of such ingredient in warehouse";
 
+    private boolean disableCourseWithoutIngredients;
     private CookedCourseDao cookedCourseDao;
     private CourseIngredientDao courseIngredientDao;
     private WarehouseController warehouseController;
+
+    public void setDisableCourseWithoutIngredients(boolean disableCourseWithoutIngredients) {
+        this.disableCourseWithoutIngredients = disableCourseWithoutIngredients;
+    }
 
     public void setCookedCourseDao(CookedCourseDao cookedCourseDao) {
         this.cookedCourseDao = cookedCourseDao;
@@ -51,7 +56,9 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
             Set<CourseIngredient> courseIngredients = courseIngredientDao.findCourseIngredients(course);
             // Check of the possibility to take ingredients consumption into account
             if (courseIngredients == null || courseIngredients.size() == 0) {
-                throwDataIntegrityException(String.format(THERE_IS_NO_INGREDIENT_LIST_FOR_COURSE_PATTERN, course.getName()));
+                if (disableCourseWithoutIngredients) {
+                    throwDataIntegrityException(String.format(THERE_IS_NO_INGREDIENT_LIST_FOR_COURSE_PATTERN, course.getName()));
+                }
             } else {
                 // Take ingredients consumption into account
                 for (CourseIngredient courseIngredient : courseIngredients) {
