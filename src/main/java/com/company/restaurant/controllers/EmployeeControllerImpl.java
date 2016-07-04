@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class EmployeeControllerImpl implements EmployeeController {
     private static final String OPERATION_IS_NOT_SUPPORTED_PATTERN = "<%s>: operation is not supported for <employee> with id <%d>";
-    private static final String THERE_IS_NOT_EMPLOYEE_WITH_ID_PATTERN = "There is not employee with id <%d>";
 
     private JobPositionDao jobPositionDao;
     private EmployeeDao employeeDao;
@@ -21,10 +20,6 @@ public class EmployeeControllerImpl implements EmployeeController {
 
     private void operationIsNotSupportedMessage(String message, int employeeId) {
         errorMessage(String.format(OPERATION_IS_NOT_SUPPORTED_PATTERN, message, employeeId));
-    }
-
-    private void employeeNotFoundMessage(int employeeId) {
-        errorMessage(String.format(THERE_IS_NOT_EMPLOYEE_WITH_ID_PATTERN, employeeId));
     }
 
     public void setJobPositionDao(JobPositionDao jobPositionDao) {
@@ -100,20 +95,10 @@ public class EmployeeControllerImpl implements EmployeeController {
         return employeeDao.findEmployeeById(employeeId);
     }
 
-    private Employee getEmployeeById(int employeeId) {
-        Employee employee = employeeDao.findEmployeeById(employeeId);
-        if (employee == null) {
-            employeeNotFoundMessage(employeeId);
-        }
-
-        return employee;
-    }
-
     @Override
-    public Set<Order> getEmployeeOrders(int employeeId) {
+    public Set<Order> getEmployeeOrders(Employee employee) {
         Set<Order> result = null;
 
-        Employee employee = getEmployeeById(employeeId);
         if (employee instanceof Waiter) {
             result = ((Waiter) employee).getOrders();
 
@@ -121,17 +106,16 @@ public class EmployeeControllerImpl implements EmployeeController {
             result = ((CookAndWaiter) employee).getOrders();
 
         } else {
-            operationIsNotSupportedMessage("EmployeeControllerImpl.getEmployeeOrders", employeeId);
+            operationIsNotSupportedMessage("EmployeeControllerImpl.getEmployeeOrders", employee.getEmployeeId());
         }
 
         return result;
     }
 
     @Override
-    public Set<CookedCourse> getEmployeeCookedCourses(int employeeId) {
+    public Set<CookedCourse> getEmployeeCookedCourses(Employee employee) {
         Set<CookedCourse> result = null;
 
-        Employee employee = getEmployeeById(employeeId);
         if (employee instanceof Cook) {
             result = ((Cook) employee).getCookedCourses();
 
@@ -139,7 +123,7 @@ public class EmployeeControllerImpl implements EmployeeController {
             result = ((CookAndWaiter) employee).getCookedCourses();
 
         } else {
-            operationIsNotSupportedMessage("EmployeeControllerImpl.getEmployeeCookedCourses", employeeId);
+            operationIsNotSupportedMessage("EmployeeControllerImpl.getEmployeeCookedCourses", employee.getEmployeeId());
         }
 
         return result;
