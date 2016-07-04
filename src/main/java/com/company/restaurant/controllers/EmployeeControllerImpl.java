@@ -101,9 +101,6 @@ public class EmployeeControllerImpl implements EmployeeController {
     public Set<Order> getEmployeeOrders(Employee employee) {
         Set<Order> result = null;
 
-        // For refresh employee-data
-        //employeeDao.findEmployeeById(employee.getEmployeeId());
-
         if (employee instanceof Waiter) {
             result = ((Waiter) employee).getOrders();
 
@@ -120,9 +117,6 @@ public class EmployeeControllerImpl implements EmployeeController {
     @Override
     public Set<CookedCourse> getEmployeeCookedCourses(Employee employee) {
         Set<CookedCourse> result = null;
-
-        // For refresh employee-data
-        //employeeDao.findEmployeeById(employee.getEmployeeId());
 
         if (employee instanceof Cook) {
             result = ((Cook) employee).getCookedCourses();
