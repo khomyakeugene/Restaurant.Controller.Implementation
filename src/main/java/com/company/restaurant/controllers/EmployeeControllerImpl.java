@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 public class EmployeeControllerImpl implements EmployeeController {
-    private static final String OPERATION_IS_NOT_SUPPORTED_PATTERN = "<%s>: operation is not supported for <employee> with id <%d>";
+    private static final String OPERATION_IS_NOT_SUPPORTED_PATTERN =
+            "<%s>: operation is not supported for <employee> with id <%d> (instance of <%s>)";
 
     private JobPositionDao jobPositionDao;
     private EmployeeDao employeeDao;
@@ -18,8 +19,9 @@ public class EmployeeControllerImpl implements EmployeeController {
         throw new DataIntegrityException(message);
     }
 
-    private void operationIsNotSupportedMessage(String message, int employeeId) {
-        errorMessage(String.format(OPERATION_IS_NOT_SUPPORTED_PATTERN, message, employeeId));
+    private void operationIsNotSupportedMessage(String message, Employee employee) {
+        errorMessage(String.format(OPERATION_IS_NOT_SUPPORTED_PATTERN, message, employee.getEmployeeId(),
+                employee.getClass().getSimpleName()));
     }
 
     public void setJobPositionDao(JobPositionDao jobPositionDao) {
@@ -99,6 +101,9 @@ public class EmployeeControllerImpl implements EmployeeController {
     public Set<Order> getEmployeeOrders(Employee employee) {
         Set<Order> result = null;
 
+        // For refresh employee-data
+        //employeeDao.findEmployeeById(employee.getEmployeeId());
+
         if (employee instanceof Waiter) {
             result = ((Waiter) employee).getOrders();
 
@@ -106,7 +111,7 @@ public class EmployeeControllerImpl implements EmployeeController {
             result = ((CookAndWaiter) employee).getOrders();
 
         } else {
-            operationIsNotSupportedMessage("EmployeeControllerImpl.getEmployeeOrders", employee.getEmployeeId());
+            operationIsNotSupportedMessage("EmployeeControllerImpl.getEmployeeOrders", employee);
         }
 
         return result;
@@ -116,6 +121,9 @@ public class EmployeeControllerImpl implements EmployeeController {
     public Set<CookedCourse> getEmployeeCookedCourses(Employee employee) {
         Set<CookedCourse> result = null;
 
+        // For refresh employee-data
+        //employeeDao.findEmployeeById(employee.getEmployeeId());
+
         if (employee instanceof Cook) {
             result = ((Cook) employee).getCookedCourses();
 
@@ -123,7 +131,7 @@ public class EmployeeControllerImpl implements EmployeeController {
             result = ((CookAndWaiter) employee).getCookedCourses();
 
         } else {
-            operationIsNotSupportedMessage("EmployeeControllerImpl.getEmployeeCookedCourses", employee.getEmployeeId());
+            operationIsNotSupportedMessage("EmployeeControllerImpl.getEmployeeCookedCourses", employee);
         }
 
         return result;
