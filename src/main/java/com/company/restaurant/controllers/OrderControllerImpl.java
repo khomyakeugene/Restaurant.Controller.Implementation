@@ -107,7 +107,7 @@ public class OrderControllerImpl extends Controller implements OrderController {
                 orderDao.addCourseToOrder(order, course);
             } else {
                 // Perhaps, to raise exception seems to be unnecessary and excessive, but let use such a "mechanism"!
-                errorMessage(String.format(
+                throwDataIntegrityException(String.format(
                         IMPOSSIBLE_TO_ADD_COURSE_TO_ORDER_PATTERN, order.getState().getName(), order.getOrderId()));
             }
         } catch (Exception e) {
@@ -125,7 +125,7 @@ public class OrderControllerImpl extends Controller implements OrderController {
             if (isFillingActionEnabled(order)) {
                 orderDao.takeCourseFromOrder(order, course);
             } else {
-                errorMessage(String.format(
+                throwDataIntegrityException(String.format(
                         IMPOSSIBLE_TO_DEL_COURSE_FROM_ORDER_PATTERN, order.getState().getName(), order.getOrderId()));
             }
         } catch (Exception e) {

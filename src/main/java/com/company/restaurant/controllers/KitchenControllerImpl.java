@@ -4,6 +4,7 @@ import com.company.restaurant.controllers.proto.Controller;
 import com.company.restaurant.dao.CookedCourseDao;
 import com.company.restaurant.dao.CourseIngredientDao;
 import com.company.restaurant.model.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -40,6 +41,7 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
                 courseIngredient.getIngredient().getName());
     }
 
+    @Transactional
     @Override
     public CookedCourse addCookedCourse(Course course, Employee employee, Float weight) {
         CookedCourse result = null;
@@ -49,7 +51,7 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
             Set<CourseIngredient> courseIngredients = courseIngredientDao.findCourseIngredients(course);
             // Check of the possibility to take ingredients consumption into account
             if (courseIngredients == null || courseIngredients.size() == 0) {
-                errorMessage(String.format(THERE_IS_NO_INGREDIENT_LIST_FOR_COURSE_PATTERN, course.getName()));
+                throwDataIntegrityException(String.format(THERE_IS_NO_INGREDIENT_LIST_FOR_COURSE_PATTERN, course.getName()));
             } else {
                 // Take ingredients consumption into account
                 for (CourseIngredient courseIngredient : courseIngredients) {
@@ -60,14 +62,14 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
                         // Search ingredient in warehouse
                         Warehouse warehouse = warehouseController.findIngredientInWarehouse(ingredient, portion);
                         if (warehouse == null) {
-                            errorMessage(needToHaveIngredientMessage(courseIngredient, weight) +
+                            throwDataIntegrityException(needToHaveIngredientMessage(courseIngredient, weight) +
                                     THERE_IS_NO_INGREDIENT_IN_WAREHOUSE_MESSAGE);
                         } else {
                             // Take ingredient consumption into account
                             amount *= weight;
                             Float warehouseAmount = warehouse.getAmount();
                             if (amount > warehouseAmount) {
-                                errorMessage(needToHaveIngredientMessage(courseIngredient, weight) +
+                                throwDataIntegrityException(needToHaveIngredientMessage(courseIngredient, weight) +
                                         String.format(THERE_IS_ONLY_OF_INGREDIENT_IN_WAREHOUSE_PATTERN,
                                                 warehouseAmount));
                             } else {

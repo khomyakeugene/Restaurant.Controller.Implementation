@@ -4,7 +4,6 @@ import com.company.restaurant.controllers.proto.Controller;
 import com.company.restaurant.dao.EmployeeDao;
 import com.company.restaurant.dao.JobPositionDao;
 import com.company.restaurant.model.*;
-import com.company.util.DataIntegrityException;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,7 @@ public class EmployeeControllerImpl extends Controller implements EmployeeContro
     private EmployeeDao employeeDao;
 
     private void operationIsNotSupportedMessage(String message, Employee employee) {
-        errorMessage(String.format(OPERATION_IS_NOT_SUPPORTED_PATTERN, message, employee.getEmployeeId(),
+        throwDataIntegrityException(String.format(OPERATION_IS_NOT_SUPPORTED_PATTERN, message, employee.getEmployeeId(),
                 employee.getClass().getSimpleName()));
     }
 
