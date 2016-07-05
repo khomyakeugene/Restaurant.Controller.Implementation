@@ -2,7 +2,6 @@ package com.company.restaurant.controllers;
 
 import com.company.restaurant.controllers.proto.Controller;
 import com.company.restaurant.dao.CookedCourseDao;
-import com.company.restaurant.dao.CourseIngredientDao;
 import com.company.restaurant.model.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,6 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
 
     private boolean disableCourseWithoutIngredients;
     private CookedCourseDao cookedCourseDao;
-    private CourseIngredientDao courseIngredientDao;
     private WarehouseController warehouseController;
 
     public void setDisableCourseWithoutIngredients(boolean disableCourseWithoutIngredients) {
@@ -30,10 +28,6 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
 
     public void setCookedCourseDao(CookedCourseDao cookedCourseDao) {
         this.cookedCourseDao = cookedCourseDao;
-    }
-
-    public void setCourseIngredientDao(CourseIngredientDao courseIngredientDao) {
-        this.courseIngredientDao = courseIngredientDao;
     }
 
     public void setWarehouseController(WarehouseController warehouseController) {
@@ -53,7 +47,7 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
 
         if (weight != null && weight > 0.0) {
             // Get ingredients for course
-            Set<CourseIngredient> courseIngredients = courseIngredientDao.findCourseIngredients(course);
+            Set<CourseIngredient> courseIngredients = course.getCourseIngredients();
             // Check of the possibility to take ingredients consumption into account
             if (courseIngredients == null || courseIngredients.size() == 0) {
                 if (disableCourseWithoutIngredients) {
@@ -105,10 +99,5 @@ public class KitchenControllerImpl extends Controller implements KitchenControll
     @Override
     public List<CookedCourse> findAllCookedCourses() {
         return cookedCourseDao.findAllCookedCourses();
-    }
-
-    @Override
-    public Set<CourseIngredient> findCourseIngredients(Course course) {
-        return courseIngredientDao.findCourseIngredients(course);
     }
 }
