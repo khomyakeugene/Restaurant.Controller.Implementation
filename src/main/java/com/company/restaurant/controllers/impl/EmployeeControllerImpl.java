@@ -1,6 +1,7 @@
-package com.company.restaurant.controllers;
+package com.company.restaurant.controllers.impl;
 
-import com.company.restaurant.controllers.proto.Controller;
+import com.company.restaurant.controllers.EmployeeController;
+import com.company.restaurant.controllers.impl.proto.Controller;
 import com.company.restaurant.dao.EmployeeDao;
 import com.company.restaurant.dao.JobPositionDao;
 import com.company.restaurant.model.*;

@@ -1,6 +1,7 @@
-package com.company.restaurant.controllers;
+package com.company.restaurant.controllers.impl;
 
-import com.company.restaurant.controllers.proto.Controller;
+import com.company.restaurant.controllers.CourseController;
+import com.company.restaurant.controllers.impl.proto.Controller;
 import com.company.restaurant.dao.CourseCategoryDao;
 import com.company.restaurant.dao.CourseDao;
 import com.company.restaurant.model.Course;

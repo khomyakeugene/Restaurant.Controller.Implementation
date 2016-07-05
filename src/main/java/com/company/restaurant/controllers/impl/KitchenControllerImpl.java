@@ -1,6 +1,8 @@
-package com.company.restaurant.controllers;
+package com.company.restaurant.controllers.impl;
 
-import com.company.restaurant.controllers.proto.Controller;
+import com.company.restaurant.controllers.KitchenController;
+import com.company.restaurant.controllers.WarehouseController;
+import com.company.restaurant.controllers.impl.proto.Controller;
 import com.company.restaurant.dao.CookedCourseDao;
 import com.company.restaurant.model.*;
 import org.springframework.transaction.annotation.Transactional;

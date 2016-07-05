@@ -1,4 +1,4 @@
-package com.company.restaurant.controllers.proto;
+package com.company.restaurant.controllers.impl.proto;
 
 import com.company.util.DataIntegrityException;
 

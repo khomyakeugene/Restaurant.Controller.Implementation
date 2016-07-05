@@ -1,6 +1,7 @@
-package com.company.restaurant.controllers;
+package com.company.restaurant.controllers.impl;
 
-import com.company.restaurant.controllers.proto.Controller;
+import com.company.restaurant.controllers.MenuController;
+import com.company.restaurant.controllers.impl.proto.Controller;
 import com.company.restaurant.dao.MenuDao;
 import com.company.restaurant.model.Course;
 import com.company.restaurant.model.Menu;
